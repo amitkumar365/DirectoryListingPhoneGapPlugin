@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>PhoneGap</title>
+<script type="text/javascript" charset="utf-8" src="phonegap-0.9.3.js"></script>
+<script type="text/javascript" charset="utf-8" src="directorylisting.js"></script>
+
+
+<script type="text/javascript" charset="utf-8">
+ document.addEventListener('deviceready', function() {
+      	var btn = document.getElementById("list-sdcard");
+	    btn.onclick = function() {
+	    
+	    	window.plugins.directorylisting.list("/sdcard",
+			    function(r){printResult(r)},
+			    function(e){log(e)}
+		    );
+	    }
+	    btn.disabled=false;
+ }, true);
+ 
+ 
+ function printResult(fileInfo){
+ 
+    var innerHtmlText=getHtml(fileInfo);    
+    document.getElementById("result").innerHTML=innerHtmlText;
+ }
+ 
+ function getHtml(fileInfo){
+    var htmlText="<ul><li>"+fileInfo.filename;
+ 	if(fileInfo.children){
+ 	  
+ 	  for(var index=0;index<fileInfo.children.length;index++){
+ 	     htmlText=htmlText+getHtml(fileInfo.children[index]);
+ 	  }
+ 	}
+ 	htmlText=htmlText+"</li></ul>";
+ 	return htmlText;
+ 	
+ }
+ 
+</script>		
+</head>
+<body >
+    <input disabled id="list-sdcard" type="button" value="List SDCard Contents"  />
+    <hr>
+    
+    <div id="result"></div>
+    
+    <hr>
+
+    
+</body>
+</html>
